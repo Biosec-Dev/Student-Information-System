@@ -1,0 +1,142 @@
+<div class="container">
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <h2>Student Dashboard</h2>
+      <div *ngIf="profile">
+        <p>Welcome, {{ profile.name }} {{ profile.lastName }}</p>
+        <p>Email: {{ profile.email }}</p>
+        <p>Student No: {{ profile.studentNo }}</p>
+        <p>Enrollment Date: {{ profile.enrollmentDate | date }}</p>
+        <p *ngIf="profile.adviser">Adviser: {{ profile.adviser.name }} {{ profile.adviser.lastName }} ({{ profile.adviser.department }})</p>
+        <p *ngIf="!profile.adviser">No assigned adviser</p>
+      </div>
+    </div>
+    <div class="col-md-6 text-end">
+      <button class="btn btn-primary me-2" (click)="refreshPage()">Refresh Page</button>
+      <button class="btn btn-danger" (click)="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="alert alert-danger" *ngIf="error">{{ error }}</div>
+  <div class="alert alert-success" *ngIf="successMessage">{{ successMessage }}</div>
+
+  <!-- Active Courses -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h4>Active Courses</h4>
+    </div>
+    <div class="card-body">
+      <!-- Filters -->
+      <div class="row mb-3">
+        <div class="col-md-5">
+          <div class="input-group">
+            <span class="input-group-text">Course Name</span>
+            <input 
+              type="text" 
+              class="form-control" 
+              placeholder="Filter by course name" 
+              [(ngModel)]="courseNameFilter"
+              (ngModelChange)="onFilterChange()">
+          </div>
+        </div>
+        <div class="col-md-5">
+          <div class="input-group">
+            <span class="input-group-text">Teacher</span>
+            <input 
+              type="text" 
+              class="form-control" 
+              placeholder="Filter by teacher name" 
+              [(ngModel)]="teacherFilter"
+              (ngModelChange)="onFilterChange()">
+          </div>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-outline-secondary w-100" (click)="courseNameFilter=''; teacherFilter=''; onFilterChange()">
+            Clear Filters
+          </button>
+        </div>
+      </div>
+
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Course Number</th>
+            <th>Name</th>
+            <th>Teacher</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let course of filteredActiveCourses">
+            <td>{{ course.courseNo }}</td>
+            <td>{{ course.name }}</td>
+            <td>{{ course.teacher.name }} {{ course.teacher.lastName }}</td>
+          </tr>
+          <tr *ngIf="!filteredActiveCourses.length && activeCourses.length">
+            <td colspan="3" class="text-center">No courses match your filters</td>
+          </tr>
+          <tr *ngIf="!activeCourses.length">
+            <td colspan="3" class="text-center">No active courses</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Pending Courses -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h4>Pending Course Requests</h4>
+    </div>
+    <div class="card-body">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Course Number</th>
+            <th>Name</th>
+            <th>Teacher</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let course of pendingCourses">
+            <td>{{ course.courseNo }}</td>
+            <td>{{ course.name }}</td>
+            <td>{{ course.teacher.name }} {{ course.teacher.lastName }}</td>
+            <td><span class="badge bg-warning">Pending</span></td>
+          </tr>
+          <tr *ngIf="!pendingCourses.length">
+            <td colspan="4" class="text-center">No pending course requests</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Request New Course -->
+  <div class="card mb-4">
+    <div class="card-header">
+      <h4>Request New Course</h4>
+    </div>
+    <div class="card-body">
+      <div *ngIf="availableCourses.length === 0" class="alert alert-info">
+        No available courses to request at this time.
+      </div>
+      <div class="row" *ngIf="availableCourses.length > 0">
+        <div class="col-md-8">
+          <select class="form-select" [(ngModel)]="selectedCourseId">
+            <option [ngValue]="null">Select a course</option>
+            <option *ngFor="let course of availableCourses" [value]="course.id">
+              {{ course.courseNo }} - {{ course.name }} (Teacher: {{ course.teacher.name }} {{ course.teacher.lastName }})
+            </option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <button class="btn btn-primary" (click)="requestCourse()" [disabled]="!selectedCourseId || loading">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-1"></span>
+            Request Course
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

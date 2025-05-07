@@ -102,12 +102,22 @@ export class TeacherDashboardComponent implements OnInit {
 
   // Filter methods
   applyCoursesFilter(): void {
+    // If no filters are applied, show all courses
+    if (!this.courseNameFilter && !this.courseNoFilter) {
+      this.filteredCourses = [...this.courses];
+      return;
+    }
+    
     this.filteredCourses = this.courses.filter(course => {
       const courseName = course.name?.toLowerCase() || '';
       const courseNo = course.courseNo?.toLowerCase() || '';
       
-      return (this.courseNameFilter === '' || courseName.includes(this.courseNameFilter.toLowerCase())) &&
-             (this.courseNoFilter === '' || courseNo.includes(this.courseNoFilter.toLowerCase()));
+      const nameMatch = this.courseNameFilter === '' || 
+                         courseName.includes(this.courseNameFilter.toLowerCase());
+      const noMatch = this.courseNoFilter === '' || 
+                      courseNo.includes(this.courseNoFilter.toLowerCase());
+                      
+      return nameMatch && noMatch;
     });
   }
 

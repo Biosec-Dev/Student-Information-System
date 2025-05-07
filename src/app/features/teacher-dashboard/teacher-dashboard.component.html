@@ -59,20 +59,18 @@
           <tr>
             <th>Course Number</th>
             <th>Name</th>
-            <th>Students</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let course of filteredCourses">
             <td>{{ course.courseNo }}</td>
             <td>{{ course.name }}</td>
-            <td>{{ course.students?.length || 0 }}</td>
           </tr>
           <tr *ngIf="!filteredCourses.length && courses.length">
-            <td colspan="3" class="text-center">No courses match your filters</td>
+            <td colspan="2" class="text-center">No courses match your filters</td>
           </tr>
           <tr *ngIf="!courses.length">
-            <td colspan="3" class="text-center">No courses assigned</td>
+            <td colspan="2" class="text-center">No courses assigned</td>
           </tr>
         </tbody>
       </table>

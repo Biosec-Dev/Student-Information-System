@@ -126,7 +126,8 @@
           <select class="form-select" [(ngModel)]="selectedCourseId">
             <option [ngValue]="null">Select a course</option>
             <option *ngFor="let course of availableCourses" [value]="course.id">
-              {{ course.courseNo }} - {{ course.name }} (Teacher: {{ course.teacher.name }} {{ course.teacher.lastName }})
+              {{ course.courseNo }} - {{ course.name }} 
+              {{ course.teacher ? '(Teacher: ' + course.teacher.name + ' ' + course.teacher.lastName + ')' : '(No Teacher Assigned)' }}
             </option>
           </select>
         </div>

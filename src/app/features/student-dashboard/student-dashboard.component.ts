@@ -76,13 +76,19 @@ export class StudentDashboardComponent implements OnInit {
   }
 
   loadAvailableCourses(): void {
+    this.loading = true;
+    console.log('Loading available courses...');
     this.studentService.getAvailableCourses().subscribe({
       next: (data) => {
         this.availableCourses = data;
+        this.loading = false;
+        console.log('Available courses loaded:', data.length);
+        console.log('Available courses:', JSON.stringify(data));
       },
       error: (error) => {
         this.error = 'Failed to load available courses';
-        console.error(error);
+        this.loading = false;
+        console.error('Error loading available courses:', error);
       }
     });
   }
@@ -112,8 +118,8 @@ export class StudentDashboardComponent implements OnInit {
     this.successMessage = '';
 
     this.studentService.requestCourse(this.selectedCourseId).subscribe({
-      next: () => {
-        this.successMessage = 'Course request submitted';
+      next: (response) => {
+        this.successMessage = typeof response === 'string' ? response : 'Enrolled course successfully';
         this.loading = false;
         this.loadPendingCourses();
         this.loadAvailableCourses();

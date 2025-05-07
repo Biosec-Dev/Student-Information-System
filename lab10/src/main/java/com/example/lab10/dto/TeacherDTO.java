@@ -1,5 +1,8 @@
 package com.example.lab10.dto;
 
+/**
+ * DTO for Teacher entity to prevent circular references in JSON serialization
+ */
 public class TeacherDTO {
     private Long id;
     private String name;
@@ -7,9 +10,8 @@ public class TeacherDTO {
     private String department;
     private String email;
 
-    // Constructors, getters, and setters
-    public TeacherDTO() {
-    }
+    // Constructors
+    public TeacherDTO() {}
 
     public TeacherDTO(Long id, String name, String lastName, String department, String email) {
         this.id = id;
@@ -19,6 +21,7 @@ public class TeacherDTO {
         this.email = email;
     }
 
+    // Getters and setters
     public Long getId() {
         return id;
     }

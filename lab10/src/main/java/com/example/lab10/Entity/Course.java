@@ -3,6 +3,8 @@ package com.example.lab10.Entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -29,6 +31,7 @@ public class Course {
     private Teacher teacher;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonBackReference
     private List<StudentCourse> studentCourses = new ArrayList<>();
 
     // Constructors

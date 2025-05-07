@@ -72,8 +72,10 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
-        // Skip filter for authentication endpoints and H2 console
-        boolean shouldNotFilter = path.startsWith("/api/auth/") || path.startsWith("/h2-console/");
+        // Skip filter ONLY for authentication endpoints, H2 console and the main courses listing
+        boolean shouldNotFilter = path.startsWith("/api/auth/") || 
+                                  path.startsWith("/h2-console/") || 
+                                  path.equals("/api/courses");
         System.out.println("JwtFilter shouldNotFilter: " + path + " = " + shouldNotFilter);
         return shouldNotFilter;
     }

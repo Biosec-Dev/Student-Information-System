@@ -3,6 +3,9 @@ package com.example.lab10.Entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -22,12 +25,16 @@ public class Teacher {
     private String lastName;
     private String department;
     private String email;
+    
+    @JsonIgnore
     private String password;
 
     @OneToMany(mappedBy = "teacher", fetch = FetchType.EAGER)
+    @JsonBackReference
     private List<Course> courses = new ArrayList<>();
     
     @OneToMany(mappedBy = "adviser", fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<Student> advisees = new ArrayList<>();
 
     // Constructors
